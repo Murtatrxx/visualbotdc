@@ -1,0 +1,15 @@
+{
+  "extends": ["config:base", "group:allNonMajor"],
+  "major": {
+    "dependencyDashboardApproval": true,
+    "reviewers": ["Murtatrxx"]
+  },
+  "minor": {
+    "reviewers": ["Murtatrxx"]
+  },
+  "schedule": ["every weekend"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": false
+  }
+}

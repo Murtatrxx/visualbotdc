@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model guilds {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model User {
+  v      Int    @map("__v")
+  userId String @map("_id")
+  blacklisted Boolean
+
+  guildId String?
+  level   Int
+  xp      Int
+
+  @@id([userId])
+  @@map("user profiles")
+}
+
+model Guild {
+  guildId         String        @map("_id")
+  premium         PremiumStatus @relation(fields: [premiumStatusId], references: [id])
+  premiumStatusId String
+
+  @@id([guildId])
+  @@map("guild profiles")
+}
+
+model PremiumStatus {
+  id               String   @id @map("_id")
+  subscriptionDate DateTime @default(now())
+  expiresAt        DateTime
+  active           Boolean
+  Guild            Guild[]
+}
+
+model UserInfractions {
+  id          String               @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int                  @map("__v")
+  guildId     String
+  userId      String
+  infractions InfractionsWarning[]
+}
+
+type InfractionsWarning {
+  authorId  String
+  caseId    String
+  reason    String?
+  timestamp Int
+  type      String
+}
+
+enum UserRole {
+  ADMINSITRATOR
+  BOT_MASTER
+  SERVER_OWNER
+  MODERATOR
+  MEMBER
+}
